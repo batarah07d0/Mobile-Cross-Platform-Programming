@@ -1,0 +1,47 @@
+[
+  {
+    "name": "Batara Hotdo Horas Simbolon",
+    "email": "batara.hotdo@student.umn.ac.id",
+    "photo_url": "Batara.jpg"
+  },
+  {
+    "name": "Efri Ramadhan",
+    "email": "efri.ramadhan@student.umn.ac.id",
+    "photo_url": "Efri.jpg"
+  },
+  {
+    "name": "Raphael Dikstra Satya Prameswara",
+    "email": "raphael.dikstra@student.umn.ac.id",
+    "photo_url": "Dikes.jpg"
+  },
+  {
+    "name": "Axel Altman",
+    "email": "axel.reginald@student.umn.ac.id",
+    "photo_url": "Axel.jpg"
+  },
+  {
+    "name": "Gilbert Star Boy",
+    "email": "gilbert.parluhutan@student.umn.ac.id",
+    "photo_url": "Gepe.jpg"
+  },
+  {
+    "name": "John Doe",
+    "email": "johndoe@example.com",
+    "photo_url": "https://randomuser.me/api/portraits/men/1.jpg"
+  },
+  {
+    "name": "Jane Smith",
+    "email": "janesmith@example.com",
+    "photo_url": "https://randomuser.me/api/portraits/women/1.jpg"
+  },
+  {
+    "name": "Alice Johnson",
+    "email": "alicejohnson@example.com",
+    "photo_url": "https://randomuser.me/api/portraits/women/2.jpg"
+  },
+  {
+    "name": "Bob Brown",
+    "email": "bobbrown@example.com",
+    "photo_url": "https://randomuser.me/api/portraits/men/2.jpg"
+  }
+]
