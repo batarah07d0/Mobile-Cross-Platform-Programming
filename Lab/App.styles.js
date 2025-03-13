@@ -5,19 +5,29 @@ const Colors = {
   white: "#FFFFFF",
   black: "#000000",
   grey100: "#f2f2f2", // Warna latar belakang lembut
+  grey200: "#e0e0e0", // Warna border
   grey700: "#616161", // Warna teks abu-abu
   blue500: "#2196F3", // Warna biru untuk tombol dan border
+  textPrimary: "#333333", // Warna teks utama
+  textSecondary: "#555555", // Warna teks sekunder
 };
 
 const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    justifyContent: "center",
+    alignItems: "center",
+    backgroundColor: Colors.grey100,
+    padding: 20,
+  },
   safeArea: {
     flex: 1,
-    backgroundColor: Colors.grey100, // Latar belakang lebih lembut
+    backgroundColor: Colors.grey100,
     paddingTop: 10,
   },
   scrollView: {
     paddingHorizontal: 15,
-    paddingBottom: 20,
+    paddingVertical: 15,
   },
   card: {
     marginBottom: 15,
@@ -33,7 +43,7 @@ const styles = StyleSheet.create({
   cardContent: {
     flexDirection: "row", // Avatar dan teks disusun secara horizontal
     alignItems: "center", // Vertikal tengah
-    padding: 16,
+    padding: 8,
   },
   avatar: {
     marginRight: 16,
@@ -44,11 +54,14 @@ const styles = StyleSheet.create({
   },
   textContainer: {
     flex: 1,
+    marginStart: 5,
   },
   title: {
     fontSize: 20,
     fontWeight: "bold",
-    color: Colors.black,
+    color: Colors.textPrimary,
+    marginBottom: 10,
+    textAlign: "left",
   },
   paragraph: {
     fontSize: 14,
@@ -60,13 +73,36 @@ const styles = StyleSheet.create({
     borderRadius: 8,
     paddingVertical: 12,
     paddingHorizontal: 20,
-    alignSelf: "flex-start", // Letakkan tombol di kiri
+    alignSelf: "flex-end", // Letakkan tombol di kanan
     elevation: 2,
+    flexDirection: "row",
+    alignItems: "center",
+    justifyContent: "center",
   },
   buttonText: {
     color: Colors.white,
     fontWeight: "bold",
     textAlign: "center",
+    marginLeft: 8,
+  },
+  // Tambahan untuk profil
+  label: {
+    fontSize: 16,
+    fontWeight: "bold",
+    color: Colors.textSecondary,
+    marginBottom: 4,
+  },
+  text: {
+    fontSize: 16,
+    color: Colors.textPrimary,
+    marginBottom: 10,
+  },
+  profileHeader: {
+    borderBottomWidth: 1,
+    borderBottomColor: Colors.grey200,
+    paddingBottom: 10,
+    marginBottom: 15,
+    width: "100%",
   },
 });
 
