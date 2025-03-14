@@ -5,6 +5,7 @@ import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import { StyleSheet } from "react-native";
 import Meet5_home from "./Meet5_home";
 import Meet5_profile from "./Meet5_profile";
+import Meet6_latih1 from "./Meet6_latih1";
 
 const Stack = createNativeStackNavigator();
 const Tab = createBottomTabNavigator();
@@ -22,6 +23,7 @@ const DrawerNavigation = () => {
       <Drawer.Navigator>
         <Drawer.Screen name="Home" component={Meet5_home} />
         <Drawer.Screen name="Profile" component={Meet5_profile} />
+        <Drawer.Screen name="Meet6_latih1" component={Meet6_latih1} />
       </Drawer.Navigator>
     </NavigationContainer>
   );
