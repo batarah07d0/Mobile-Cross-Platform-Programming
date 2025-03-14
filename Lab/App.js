@@ -104,8 +104,8 @@ const appStyles = StyleSheet.create({
     padding: 20,
   },
   header: {
-    marginTop: 40,
-    marginBottom: 30,
+    marginTop: 10,
+    marginBottom: 10,
     alignItems: "center",
   },
   headerTitle: {
