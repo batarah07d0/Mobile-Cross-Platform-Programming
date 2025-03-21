@@ -1,15 +1,7 @@
-import RNDateTimePicker from "@react-native-community/datetimepicker";
 import { Picker } from "@react-native-picker/picker";
 import PropTypes from "prop-types";
 import React, { useState } from "react";
-import {
-  Button,
-  StyleSheet,
-  Switch,
-  Text,
-  TextInput,
-  View,
-} from "react-native";
+import { StyleSheet, Switch, Text, TextInput, View } from "react-native";
 
 const Meet6_latih1 = () => {
   const [selectedLanguage, setSelectedLanguage] = useState(
@@ -90,10 +82,10 @@ const Meet6_latih1 = () => {
         value={isEnabled}
       />
 
-      <View style={{ marginTop: 10 }}>
+      {/* <View style={{ marginTop: 10 }}>
         <Button title="Show Date Picker" onPress={() => setShow(true)} />
-      </View>
-      <RNDateTimePicker mode="date" value={new Date()} display="spinner" />
+      </View> */}
+      {/* <RNDateTimePicker mode="date" value={new Date()} display="spinner" /> */}
     </View>
   );
 };
