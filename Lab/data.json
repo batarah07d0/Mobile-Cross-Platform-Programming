@@ -1,0 +1,56 @@
+[
+  {
+    "name": "Batara Hotdo Horas Simbolon",
+    "email": "batara.hotdo@student.umn.ac.id",
+    "photo_url": "Batara.jpg",
+    "bio": "Mahasiswa yang aktif dalam organisasi dan memiliki minat dalam teknologi dan pengembangan perangkat lunak."
+  },
+  {
+    "name": "Efri Ramadhan",
+    "email": "efri.ramadhan@student.umn.ac.id",
+    "photo_url": "Efri.jpg",
+    "bio": "Suka belajar hal baru tentang teknologi, terutama di bidang pemrograman dan data science."
+  },
+  {
+    "name": "Raphael Dikstra Satya Prameswara",
+    "email": "raphael.dikstra@student.umn.ac.id",
+    "photo_url": "Dikes.jpg",
+    "bio": "Penyuka desain grafis dan pengembangan aplikasi, dengan fokus pada UX/UI design."
+  },
+  {
+    "name": "Axel Altman",
+    "email": "axel.reginald@student.umn.ac.id",
+    "photo_url": "Axel.jpg",
+    "bio": "Tertarik dalam dunia teknologi dan perangkat keras komputer. Aktif dalam kegiatan olahraga."
+  },
+  {
+    "name": "Gilbert Star Boy",
+    "email": "gilbert.parluhutan@student.umn.ac.id",
+    "photo_url": "Gepe.jpg",
+    "bio": "Hobi bermain musik dan gaming. Memiliki ketertarikan besar dalam pengembangan web."
+  },
+  {
+    "name": "John Doe",
+    "email": "johndoe@example.com",
+    "photo_url": "https://randomuser.me/api/portraits/men/1.jpg",
+    "bio": "Pengusaha muda yang fokus pada teknologi dan inovasi digital."
+  },
+  {
+    "name": "Jane Smith",
+    "email": "janesmith@example.com",
+    "photo_url": "https://randomuser.me/api/portraits/women/1.jpg",
+    "bio": "Suka dengan seni dan desain grafis. Memiliki minat dalam dunia pemasaran digital."
+  },
+  {
+    "name": "Alice Johnson",
+    "email": "alicejohnson@example.com",
+    "photo_url": "https://randomuser.me/api/portraits/women/2.jpg",
+    "bio": "Mahasiswa yang aktif di bidang pendidikan dan pengembangan diri."
+  },
+  {
+    "name": "Bob Brown",
+    "email": "bobbrown@example.com",
+    "photo_url": "https://randomuser.me/api/portraits/men/2.jpg",
+    "bio": "Penyuka teknologi dan gadget terbaru. Fokus pada pengembangan aplikasi mobile."
+  }
+]
