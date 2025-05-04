@@ -1,12 +1,24 @@
 import { CameraType, CameraView, useCameraPermissions } from "expo-camera";
-import { useRef, useState } from "react";
-import { Button, StyleSheet, Text, TouchableOpacity, View } from "react-native";
+import * as ImagePicker from "expo-image-picker";
+import * as MediaLibrary from "expo-media-library";
+import { useEffect, useRef, useState } from "react";
+import {
+  Alert,
+  Button,
+  Image,
+  StyleSheet,
+  Text,
+  TouchableOpacity,
+  View,
+} from "react-native";
 
+// Interface untuk props CameraSetup
 interface CameraSetupProps {
   onCapture: (uri: string) => void;
   onClose: () => void;
 }
 
+// Komponen CameraSetup yang asli
 export default function CameraSetup({ onCapture, onClose }: CameraSetupProps) {
   const [facing, setFacing] = useState<CameraType>("back");
   const [permission, requestPermission] = useCameraPermissions();
@@ -38,7 +50,7 @@ export default function CameraSetup({ onCapture, onClose }: CameraSetupProps) {
       try {
         const photo = await cameraRef.current.takePictureAsync();
         onCapture(photo.uri);
-        onClose(); // Close camera after taking picture
+        onClose();
       } catch (error) {
         console.error("Error taking picture:", error);
       }
@@ -46,27 +58,172 @@ export default function CameraSetup({ onCapture, onClose }: CameraSetupProps) {
   };
 
   return (
+    <View style={styles.CameraContainer}>
+      <CameraView ref={cameraRef} style={styles.camera} facing={facing} />
+      <View style={[styles.topControls, { position: "absolute" }]}>
+        <TouchableOpacity onPress={onClose} style={styles.closeButton}>
+          <Text style={styles.text}>✕</Text>
+        </TouchableOpacity>
+      </View>
+
+      <View style={[styles.buttonContainer, { position: "absolute" }]}>
+        <TouchableOpacity
+          style={styles.flipButton}
+          onPress={toggleCameraFacing}
+        >
+          <Text style={styles.text}>Flip</Text>
+        </TouchableOpacity>
+
+        <TouchableOpacity style={styles.captureButton} onPress={takePicture}>
+          <View style={styles.captureCircle}></View>
+        </TouchableOpacity>
+      </View>
+    </View>
+  );
+}
+
+// Komponen CameraScreen untuk digunakan dalam navigasi
+export function CameraScreen({ navigation }) {
+  const [uri, setUri] = useState("");
+  const [showCamera, setShowCamera] = useState(false);
+  const [mediaPermission, requestMediaPermission] =
+    MediaLibrary.usePermissions();
+
+  // Request permissions when component mounts
+  useEffect(() => {
+    if (!mediaPermission) {
+      requestMediaPermission();
+    }
+  }, []);
+
+  const openCamera = () => {
+    console.log("Opening camera...");
+    setShowCamera(true);
+  };
+
+  const closeCamera = () => {
+    setShowCamera(false);
+  };
+
+  const handleCapture = (imageUri) => {
+    console.log("Image captured:", imageUri);
+    setUri(imageUri);
+    closeCamera();
+  };
+
+  // Tambahkan fungsi openImagePicker yang dipindahkan dari HomeScreen
+  const openImagePicker = async () => {
+    console.log("Opening image picker...");
+
+    try {
+      // Request media library permissions
+      const permissionResult =
+        await ImagePicker.requestMediaLibraryPermissionsAsync();
+
+      if (!permissionResult.granted) {
+        Alert.alert(
+          "Permission Required",
+          "You need to grant gallery permissions to select images"
+        );
+        return;
+      }
+
+      // Launch the image library
+      const result = await ImagePicker.launchImageLibraryAsync({
+        mediaTypes: ImagePicker.MediaTypeOptions.Images,
+        allowsEditing: true,
+        aspect: [4, 3],
+        quality: 1,
+      });
+
+      console.log("Image picker result:", result);
+
+      if (!result.canceled && result.assets && result.assets.length > 0) {
+        // Handle the selected image based on Expo SDK version
+        const selectedUri = result.assets[0].uri;
+        console.log("Selected image URI:", selectedUri);
+        setUri(selectedUri);
+      } else {
+        console.log("Image selection cancelled");
+      }
+    } catch (error) {
+      console.error("Error opening image picker:", error);
+      Alert.alert("Error", "Failed to open gallery: " + error.message);
+    }
+  };
+
+  const saveImage = async () => {
+    if (!uri) {
+      Alert.alert("Error", "No image to save");
+      return;
+    }
+
+    // Check for media library permissions
+    if (!mediaPermission || !mediaPermission.granted) {
+      const permission = await requestMediaPermission();
+      if (!permission.granted) {
+        Alert.alert(
+          "Permission Required",
+          "Storage permission is needed to save images"
+        );
+        return;
+      }
+    }
+
+    try {
+      // Step 1: Simpan gambar ke Media Library
+      const asset = await MediaLibrary.createAssetAsync(uri);
+
+      // Step 2: Buat atau gunakan album "Pictures"
+      // Ambil daftar album yang ada
+      const albums = await MediaLibrary.getAlbumsAsync();
+      const picturesAlbum = albums.find((album) => album.title === "Pictures");
+
+      if (picturesAlbum) {
+        // Jika album Pictures sudah ada, tambahkan asset ke sana
+        await MediaLibrary.addAssetsToAlbumAsync([asset], picturesAlbum, false);
+        console.log("Added to existing Pictures album");
+      } else {
+        // Jika tidak ada, buat album baru bernama "Pictures"
+        await MediaLibrary.createAlbumAsync("Pictures", asset, false);
+        console.log("Created new Pictures album");
+      }
+
+      Alert.alert("Success", "Image saved to Pictures folder!");
+    } catch (error) {
+      console.error("Error saving image:", error);
+      Alert.alert("Error", "Failed to save image: " + error.message);
+    }
+  };
+
+  // Render camera jika showCamera adalah true
+  if (showCamera) {
+    return <CameraSetup onCapture={handleCapture} onClose={closeCamera} />;
+  }
+
+  // Tampilan utama CameraScreen dengan tambahan tombol Gallery
+  return (
     <View style={styles.container}>
-      <CameraView ref={cameraRef} style={styles.camera} facing={facing}>
-        <View style={styles.topControls}>
-          <TouchableOpacity onPress={onClose} style={styles.closeButton}>
-            <Text style={styles.text}>✕</Text>
-          </TouchableOpacity>
-        </View>
+      <Text style={styles.header}>
+        Batara Hotdo Horas Simbolon - 00000078626
+      </Text>
+      <View style={styles.buttonGroup}>
+        <Button title="Open Camera" onPress={openCamera} />
+        <Button title="Open Gallery" onPress={openImagePicker} />
+        <Button title="Save Image" onPress={saveImage} disabled={!uri} />
+      </View>
 
-        <View style={styles.buttonContainer}>
-          <TouchableOpacity
-            style={styles.flipButton}
-            onPress={toggleCameraFacing}
-          >
-            <Text style={styles.text}>Flip Camera</Text>
-          </TouchableOpacity>
-
-          <TouchableOpacity style={styles.captureButton} onPress={takePicture}>
-            <View style={styles.captureCircle}></View>
-          </TouchableOpacity>
+      {uri ? (
+        <View style={styles.imageContainer}>
+          <Image
+            source={{ uri }}
+            style={styles.previewImage}
+            resizeMode="contain"
+          />
         </View>
-      </CameraView>
+      ) : (
+        <Text style={styles.noImageText}>No image captured/selected yet!</Text>
+      )}
     </View>
   );
 }
@@ -74,25 +231,45 @@ export default function CameraSetup({ onCapture, onClose }: CameraSetupProps) {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
+    backgroundColor: "#fff",
+    alignItems: "center",
     justifyContent: "center",
+    paddingHorizontal: 20,
+  },
+  CameraContainer: {
+    flex: 1,
+    width: "100%",
+  },
+  camera: {
+    flex: 1,
+    width: "100%",
   },
   message: {
     textAlign: "center",
     paddingBottom: 10,
   },
-  camera: {
-    flex: 1,
-  },
   buttonContainer: {
-    position: "absolute",
     bottom: 0,
+    left: 0,
+    right: 0,
     flexDirection: "row",
     backgroundColor: "transparent",
-    width: "100%",
-    paddingVertical: 20,
-    paddingHorizontal: 30,
+    padding: 20,
     justifyContent: "space-between",
     alignItems: "center",
+  },
+  topControls: {
+    top: 40,
+    left: 20,
+    zIndex: 10,
+  },
+  closeButton: {
+    backgroundColor: "rgba(0,0,0,0.2)",
+    borderRadius: 20,
+    width: 40,
+    height: 40,
+    alignItems: "center",
+    justifyContent: "center",
   },
   flipButton: {
     alignItems: "center",
@@ -115,17 +292,36 @@ const styles = StyleSheet.create({
     fontWeight: "bold",
     color: "white",
   },
-  topControls: {
-    position: "absolute",
-    top: 40,
-    left: 20,
+  header: {
+    fontSize: 15,
+    fontWeight: "bold",
+    marginBottom: 10,
   },
-  closeButton: {
-    backgroundColor: "rgba(0,0,0,0.2)",
-    borderRadius: 20,
-    width: 40,
-    height: 40,
-    alignItems: "center",
+  buttonGroup: {
+    flexDirection: "column",
     justifyContent: "center",
+    alignItems: "center",
+    width: "80%",
+    gap: 10,
+    marginBottom: 20,
+  },
+  imageContainer: {
+    marginTop: 20,
+    width: "100%",
+    height: 350,
+    borderRadius: 10,
+    overflow: "hidden",
+    borderWidth: 1,
+    borderColor: "#ddd",
+  },
+  previewImage: {
+    width: "100%",
+    height: "100%",
+  },
+  noImageText: {
+    marginTop: 30,
+    fontSize: 16,
+    color: "#666",
+    textAlign: "center",
   },
 });
