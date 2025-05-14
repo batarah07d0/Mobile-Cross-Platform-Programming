@@ -1,0 +1,1 @@
+Menggunakan Supabase untuk Database
