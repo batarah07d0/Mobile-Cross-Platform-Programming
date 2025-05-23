@@ -23,27 +23,17 @@ CREATE TABLE IF NOT EXISTS public.locations (
 ALTER TABLE public.photos ENABLE ROW LEVEL SECURITY;
 ALTER TABLE public.locations ENABLE ROW LEVEL SECURITY;
 
--- Modify existing tables to make user_id nullable if it's not already
-ALTER TABLE public.photos ALTER COLUMN user_id DROP NOT NULL;
-ALTER TABLE public.locations ALTER COLUMN user_id DROP NOT NULL;
-
--- Drop existing policies (which might be conflicting)
-DROP POLICY IF EXISTS "Allow select for everyone" ON public.photos;
-DROP POLICY IF EXISTS "Allow insert for everyone" ON public.photos;
-DROP POLICY IF EXISTS "Allow select for everyone" ON public.locations;
-DROP POLICY IF EXISTS "Allow insert for everyone" ON public.locations;
-
--- Create more specific policies with unique names
-CREATE POLICY "photos_select_policy" 
+-- Create policies to allow access to everyone (you can refine these later)
+CREATE POLICY "Allow select for everyone" 
 ON public.photos FOR SELECT USING (true);
 
-CREATE POLICY "photos_insert_policy" 
+CREATE POLICY "Allow insert for everyone" 
 ON public.photos FOR INSERT WITH CHECK (true);
 
-CREATE POLICY "locations_select_policy" 
+CREATE POLICY "Allow select for everyone" 
 ON public.locations FOR SELECT USING (true);
 
-CREATE POLICY "locations_insert_policy" 
+CREATE POLICY "Allow insert for everyone" 
 ON public.locations FOR INSERT WITH CHECK (true);
 
 -- Create the storage bucket for media files if it doesn't exist

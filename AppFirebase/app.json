@@ -32,8 +32,15 @@
         "ACCESS_COARSE_LOCATION",
         "WRITE_EXTERNAL_STORAGE",
         "READ_EXTERNAL_STORAGE",
+        "MEDIA_LIBRARY",
+        "CAMERA",
+        "ACCESS_FINE_LOCATION",
+        "ACCESS_COARSE_LOCATION",
+        "WRITE_EXTERNAL_STORAGE",
+        "READ_EXTERNAL_STORAGE",
         "MEDIA_LIBRARY"
-      ]
+      ],
+      "package": "com.batarahotdo.AppFirebase"
     },
     "web": {
       "favicon": "./assets/favicon.png"

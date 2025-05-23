@@ -3,6 +3,7 @@ import * as FileSystem from "expo-file-system";
 // Remove the uuid import and add a simple UUID generator
 // import { v4 as uuidv4 } from "uuid";
 import { supabase } from "../lib/supabase";
+import { recordOperation } from "./supabaseOperationsTracker";
 
 // Simple UUID generator that works in React Native
 const generateUUID = () => {
@@ -38,6 +39,8 @@ export const savePhoto = async (uri, location) => {
       });
 
     if (storageError) {
+      // Record the failed operation
+      await recordOperation("photos", false);
       throw new Error(`Storage error: ${storageError.message}`);
     }
 
@@ -61,9 +64,13 @@ export const savePhoto = async (uri, location) => {
       .select();
 
     if (error) {
+      // Record the failed operation
+      await recordOperation("photos", false);
       throw new Error(`Database error: ${error.message}`);
     }
 
+    // Record the successful operation
+    await recordOperation("photos", true);
     return data[0];
   } catch (error) {
     console.error("Error saving photo:", error);
@@ -80,9 +87,13 @@ export const getPhotos = async () => {
       .order("created_at", { ascending: false });
 
     if (error) {
+      // Record the failed operation
+      await recordOperation("photos", false);
       throw error;
     }
 
+    // Record the successful operation
+    await recordOperation("photos", true);
     return data || [];
   } catch (error) {
     console.error("Error fetching photos:", error);
@@ -94,6 +105,8 @@ export const getPhotos = async () => {
 export const saveLocation = async (location) => {
   try {
     if (!location || !location.coords) {
+      // Record the failed operation
+      await recordOperation("locations", false);
       throw new Error("Invalid location data");
     }
 
@@ -111,9 +124,13 @@ export const saveLocation = async (location) => {
       .select();
 
     if (error) {
+      // Record the failed operation
+      await recordOperation("locations", false);
       throw new Error(`Database error: ${error.message}`);
     }
 
+    // Record the successful operation
+    await recordOperation("locations", true);
     return data[0];
   } catch (error) {
     console.error("Error saving location:", error);
@@ -130,9 +147,13 @@ export const getLocations = async () => {
       .order("timestamp", { ascending: false });
 
     if (error) {
+      // Record the failed operation
+      await recordOperation("locations", false);
       throw error;
     }
 
+    // Record the successful operation
+    await recordOperation("locations", true);
     return data || [];
   } catch (error) {
     console.error("Error fetching locations:", error);

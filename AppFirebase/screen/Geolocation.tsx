@@ -14,6 +14,12 @@ import {
   View,
 } from "react-native";
 import { saveLocation } from "../services/mediaService";
+// Import notification service
+import {
+  requestNotificationsPermissions,
+  showErrorNotification,
+  showSuccessNotification,
+} from "../services/notificationService";
 
 // Kunci untuk menyimpan URI direktori yang dipilih
 const DOWNLOAD_DIRECTORY_URI_KEY = "download_directory_uri";
@@ -47,6 +53,9 @@ const Geolocation = () => {
         if (savedUri) {
           setDownloadDirectoryUri(savedUri);
         }
+
+        // Request notification permissions
+        await requestNotificationsPermissions();
       } catch (error) {
         console.error("Error loading saved directory:", error);
       }
@@ -206,8 +215,23 @@ const Geolocation = () => {
     try {
       setSavingToCloud(true);
 
+      // Create a formatted location object with proper timestamp
+      const formattedLocation = {
+        coords: lokasi.coords,
+        // Convert milliseconds timestamp to ISO string format
+        timestamp: new Date(lokasi.timestamp).toISOString(),
+      };
+
       // Save location to Supabase using the imported saveLocation function
-      const savedLocation = await saveLocation(lokasi);
+      const savedLocation = await saveLocation(formattedLocation);
+
+      // Show success notification with location data
+      await showSuccessNotification(
+        "Location Saved Successfully",
+        "Your location has been recorded to the cloud database.",
+        lokasi.coords.latitude,
+        lokasi.coords.longitude
+      );
 
       console.log("Saved location to Supabase:", savedLocation);
       Alert.alert(
@@ -216,6 +240,15 @@ const Geolocation = () => {
       );
     } catch (error) {
       console.error("Error saving location to Supabase:", error);
+
+      // Show error notification with location data
+      await showErrorNotification(
+        "Failed to Save Location",
+        "Error: " + (error as Error).message,
+        lokasi.coords.latitude,
+        lokasi.coords.longitude
+      );
+
       Alert.alert(
         "Error",
         "Failed to save to cloud: " + (error as Error).message

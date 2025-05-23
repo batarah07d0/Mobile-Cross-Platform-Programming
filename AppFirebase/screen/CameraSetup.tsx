@@ -15,6 +15,13 @@ import {
 } from "react-native";
 // Import mediaService at the top
 import { savePhoto } from "../services/mediaService";
+// Import notification service
+import {
+  requestNotificationsPermissions,
+  showErrorNotification,
+  showSuccessNotification,
+} from "../services/notificationService";
+// Import operation tracking components
 
 // Interface untuk props CameraSetup
 interface CameraSetupProps {
@@ -119,6 +126,9 @@ export function CameraScreen({ navigation }: NavigationProps) {
       if (status !== "granted") {
         console.log("Location permission not granted");
       }
+
+      // Request notification permissions
+      await requestNotificationsPermissions();
     };
 
     setupPermissions();
@@ -257,6 +267,21 @@ export function CameraScreen({ navigation }: NavigationProps) {
       // Save photo and location to Supabase
       const savedPhoto = await savePhoto(uri, currentLocation);
 
+      // Show success notification with location data
+      if (currentLocation && currentLocation.coords) {
+        await showSuccessNotification(
+          "Photo Saved Successfully",
+          "Your photo has been uploaded to the cloud database.",
+          currentLocation.coords.latitude,
+          currentLocation.coords.longitude
+        );
+      } else {
+        await showSuccessNotification(
+          "Photo Saved Successfully",
+          "Your photo has been uploaded to the cloud database."
+        );
+      }
+
       console.log("Saved to Supabase:", savedPhoto);
       Alert.alert(
         "Saved to Cloud",
@@ -264,6 +289,22 @@ export function CameraScreen({ navigation }: NavigationProps) {
       );
     } catch (error) {
       console.error("Error saving to Supabase:", error);
+
+      // Show error notification with location data if available
+      if (location && location.coords) {
+        await showErrorNotification(
+          "Failed to Save Photo",
+          "Error: " + error.message,
+          location.coords.latitude,
+          location.coords.longitude
+        );
+      } else {
+        await showErrorNotification(
+          "Failed to Save Photo",
+          "Error: " + error.message
+        );
+      }
+
       Alert.alert("Error", "Failed to save to cloud: " + error.message);
     } finally {
       setSavingToCloud(false);
